@@ -1,12 +1,12 @@
 import os
 import random
 import requests
-import google.generativeai as genai
+from google import genai
 
 GEMINI_KEY = os.environ["GEMINI_API_KEY"]
 BINANCE_KEY = os.environ["BINANCE_API_KEY"]
 
-genai.configure(api_key=GEMINI_KEY)
+client = genai.Client(api_key=GEMINI_KEY)
 
 TOPICS = [
     "Bitcoin latest price movement",
@@ -20,12 +20,11 @@ TOPICS = [
 
 def make_post():
     topic = random.choice(TOPICS)
-    model = genai.GenerativeModel("gemini-1.5-flash")
-    result = model.generate_content(
-        f"Write a short engaging Binance Square post about: {topic}. "
-        f"Keep it under 150 words. Friendly tone. Add 3 hashtags at the end. No markdown."
+    response = client.models.generate_content(
+        model="gemini-2.0-flash",
+        contents=f"Write a short engaging Binance Square post about: {topic}. Keep it under 150 words. Friendly tone. Add 3 hashtags at the end. No markdown."
     )
-    return result.text
+    return response.text
 
 def publish(content):
     url = "https://www.binance.com/bapi/social/v1/friendly/social/post/create"
