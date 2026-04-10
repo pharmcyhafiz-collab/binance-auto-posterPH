@@ -16,7 +16,7 @@ jobs:
           python-version: '3.11'
 
       - name: Install libraries
-        run: pip install google-generativeai requests
+        run: run: pip install google-genai requests
 
       - name: Run agent
         env:
